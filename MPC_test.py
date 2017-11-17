@@ -2,13 +2,14 @@ import numpy as np
 import control as control
 import cvxpy
 import matplotlib.pyplot as plt
+import time
 
 kelvin=273.15
 class test_EMS_MPC_temperature():
     def __init__(self):
 
 
-        self.ems_dt=30*60
+        self.ems_dt=10*60
         self.T = 60*60*24/self.ems_dt
         self.M=60*60*24/self.ems_dt #Number of simulation steps
         self.R = 0.0066
@@ -30,20 +31,21 @@ class test_EMS_MPC_temperature():
         totalcost = 0.0
         constr = []
         for t in range(self.T):
-            totalcost += elec_price[t]*u[t] + cvxpy.quad_form(epsi[t + 1], q)
+            totalcost += elec_price[t]*u[t] #+ cvxpy.quad_form(epsi[t + 1], q)
             constr += [x[:, t + 1] == A * x[:, t] + B * u[t] + B1*temp_ext[t]]
 
-            constr += [x[0, t + 1] < kelvin+30+epsi[t + 1]]
-            constr += [x[0, t + 1] > kelvin+26-epsi[t + 1]]
+            constr += [x[0, t + 1] < kelvin+30]#+epsi[t + 1]]
+            constr += [x[0, t + 1] > kelvin+26]#-epsi[t + 1]]
             constr += [u[t] <= 5000]
             constr += [u[t] >= 0]
         constr += [x[:, 0] == np.array([[temp_cur],[temp_wall_cur]])]
-        constr += [epsi[0] == 30]
+        #constr += [epsi[0] == 30]
 
         prob = cvxpy.Problem(cvxpy.Minimize(totalcost), constr)
-
+        t0 = time.time()
         prob.solve(verbose=False)
-
+        t1 = time.time()
+        print(t1 - t0)
         if prob.status == cvxpy.OPTIMAL:
             p_opt = np.array(u.value[0, :]).flatten()
             return p_opt[0]
@@ -119,7 +121,7 @@ ems=test_EMS_MPC_temperature()
 ext_temperature = get_ext_temp(ems.T, ems.M)
 elec_price = get_elec_price(ems.T, ems.M)
 
-Tins=kelvin+0
+Tins=kelvin+27
 Twall=(Tins+ext_temperature[0])/2
 T=np.array([[Tins], [Twall]])
 

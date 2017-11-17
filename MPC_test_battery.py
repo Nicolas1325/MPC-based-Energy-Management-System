@@ -24,7 +24,7 @@ class test_EMS_MPC_temperature():
         u = cvxpy.Variable(1, self.T)
         uh = cvxpy.Variable(1, self.T)
         ub = cvxpy.Variable(1, self.T)
-        Eb = cvxpy.Variable(1, self.T)
+        Eb = cvxpy.Variable(1, self.T + 1)
         epsi = cvxpy.Variable(1, self.T + 1)
         q = 100
 
