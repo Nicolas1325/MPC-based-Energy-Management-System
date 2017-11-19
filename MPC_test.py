@@ -10,8 +10,8 @@ class test_EMS_MPC_temperature():
 
 
         self.ems_dt=10*60
-        self.T = 60*60*24/self.ems_dt
-        self.M=60*60*24/self.ems_dt #Number of simulation steps
+        self.T = 60*60*1/self.ems_dt
+        self.M=60*60*1/self.ems_dt #Number of simulation steps
         self.R = 0.0066
         self.cw = 1565600
         self.p_air = 1.292
@@ -43,7 +43,7 @@ class test_EMS_MPC_temperature():
 
         prob = cvxpy.Problem(cvxpy.Minimize(totalcost), constr)
         t0 = time.time()
-        prob.solve(verbose=False)
+        prob.solve(verbose=True, solver=cvxpy.ECOS)
         t1 = time.time()
         print(t1 - t0)
         if prob.status == cvxpy.OPTIMAL:
