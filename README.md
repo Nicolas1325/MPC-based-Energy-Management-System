@@ -15,7 +15,7 @@ the loads instead of the construction of new generators. Demand side management
 allows to optimize the human comfort and health in the building while using the
 grid efficiently and inexpensively. 
 
-Demand Response is the strategy of interest for this project. This involves the installation of a more
+Demand Response(DR) is the strategy of interest for this project. This involves the installation of a more
 enhance equipment such as smart meters. These devices allow a two-ways/realtime
 communication between the grid and the households to transmit the requests,
 household consumption or electricity tariffs. Many DR program are ongoing on the
